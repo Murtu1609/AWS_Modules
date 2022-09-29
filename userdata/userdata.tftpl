@@ -1,0 +1,51 @@
+#!/bin/bash
+
+#swicth user
+#sudo -u ec2-user -s
+
+sudo yum update -y
+
+#install docker and add ec2-user to docker group
+sudo amazon-linux-extras install -y docker
+#sudo systemctl start docker
+sudo systemctl enable docker
+sudo gpasswd -a ec2-user docker
+
+#create directory
+#mkdir ~/.${directory}
+mkdir /home/ec2-user/.${directory}
+
+#create env file
+echo "ROOT=/chainlink
+LOG_LEVEL=debug
+ETH_CHAIN_ID=4
+CHAINLINK_TLS_PORT=0
+SECURE_COOKIES=false
+-ALLOW_ORIGINS=*" > /home/ec2-user/.${directory}/.env
+
+#add eth url
+echo "ETH_URL=${eth_url}" >> /home/ec2-user/.${directory}/.env
+
+#add database url
+echo "DATABASE_URL=postgresql://${dbusername}:${dbpassword}@${dbendpoint}/${dbname}" >> /home/ec2-user/.${directory}/.env
+
+# Create api file
+echo "${apiusername}" > /home/ec2-user/.${directory}/.api
+echo "${apipassword}" >> /home/ec2-user/.${directory}/.api
+
+# Create password file
+echo "${walletpassword}" > /home/ec2-user/.${directory}/.password
+
+#change ownership
+sudo chown -R ec2-user /home/ec2-user/.${directory}
+
+
+#configure logging
+#sudo echo "{
+#  "log-driver": "awslogs"
+#}" >> /etc/docker/daemon.json
+
+#reboot instance
+#sudo yum update
+sudo reboot
+
