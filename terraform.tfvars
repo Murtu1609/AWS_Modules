@@ -79,7 +79,7 @@ security_groups = [
     #key_name=null
 
     directory = "chainlink-rinkeby"
-    eth_url= "wss://rinkeby.infura.io/ws/v3/a0973843855047aab56e73afb316103d"
+    eth_url= "your_eth_url"
     apiusername = "murtuc83@yahoo.com"
 
 
